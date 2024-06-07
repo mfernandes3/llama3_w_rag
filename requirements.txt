@@ -1,2 +1,2 @@
-streamlit
-embedchain
+embedchain==0.1.106
+streamlit==1.26.0
