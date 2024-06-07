@@ -41,9 +41,11 @@ st.caption(
     "This app allows you to chat with a PDF using Llama3 running locally with Ollama!"
 )
 
-# Create a temporary directory to store the PDF file
-db_path = "/Users/miguel.fernandes/Documents/rag_pdf_files/"
-print(f"Created temporary directory: {db_path}")
+# Create a temporary directory to store the files and the database in the local folder
+if not os.path.exists("chroma_db"):
+    os.mkdir("chroma_db")
+db_path = os.curdir + "/chroma_db"
+
 # Create an instance of the embedchain App
 app = embedchain_bot(db_path)
 # %%
@@ -67,9 +69,8 @@ if pdf_file:
     pdf_context= st.text_area("Add context as text to the PDF file")
     if st.button("Add PDF"):
         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as f:
-            f.write(pdf_file.getvalue())
-            
-            app.add(f.name, data_type="pdf_file", metadata={"context": pdf_context})
+            f.write(pdf_file.getvalue())    
+            app.add(f.name, data_type="pdf_file", metadata={"metadata": pdf_context})
         os.remove(f.name)
         st.success(f"Added {pdf_file.name} to knowledge base!")
 
@@ -78,17 +79,16 @@ website_url = st.text_input("Add a website URL")
 if website_url:
     website_context = st.text_area("Add context as text to the website")
     if st.button("Add Website"):
-        
-        app.add(website_url, data_type='web_page', context=website_context)
+        st.write("Metadata to be added:", website_context)
+        app.add(website_url, data_type='web_page', metadata= {"metadata": website_context})
         st.success("Website added successfully!")
 
 # Add context as text
 context_text = st.text_area("Add text as context")
 if context_text:
-    context_text = st.text_area("Add additional ontext as text")
-    if st.button("Add Context"):
-        
-        app.add(context_text, data_type="text", context= context_text)
+    context_text = st.text_area("Add additional context about the free text")
+    if st.button("Add Context"):     
+        app.add(context_text, data_type="text", metadata={"metadata": context_text})
         st.success("Context added successfully!")
  
 
@@ -96,6 +96,6 @@ if context_text:
 prompt = st.text_input("Ask a question about the content provided")
 # Display the answer
 if prompt:
-    answer = app.search(prompt)
+    answer = app.query(prompt)
     st.write(answer)
-    st.write("data sources ", app.get_data_sources())
+    #st.write(app.get_data_sources())
