@@ -38,7 +38,7 @@ def embedchain_bot(db_path):
 
 st.title("Local Llama3 Chatbot with Ollama and Embedchain")
 st.caption(
-    "This app allows you to chat with a PDF using Llama3 running locally with Ollama!"
+    "This app allows you to chat with a Llama3 model and apply RAG running locally with Ollama!"
 )
 
 # Create a temporary directory to store the files and the database in the local folder
