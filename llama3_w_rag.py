@@ -15,7 +15,7 @@ def embedchain_bot(db_path):
                 "provider": "ollama",
                 "config": {
                     "model": "llama3:instruct",
-                    "max_tokens": 250,
+                    "max_tokens": 500,
                     "temperature": 0.01,
                     "stream": True,
                     "base_url": "http://localhost:11434",
